@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.1</TargetFrameworks>
+    <RootNamespace>lazyzu.Jira.Database.OOO</RootNamespace>
+    <PackageId>lazyzu.Jira.Database.OOO</PackageId>
+    <IsPackable>true</IsPackable>
+    <LangVersion>latest</LangVersion>
+
+    <!--For source generation output files (source control & review), please not edit generated source code (assembly is reference in memory source code)-->
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <GeneratedFolder>Generated</GeneratedFolder>
+    <CompilerGeneratedFilesOutputPath>$(GeneratedFolder)\$(TargetFramework)</CompilerGeneratedFilesOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Jira.Database.Querier\Jira.Database.Querier.csproj" /> <!--Field define need to reference-->
+    <PackageReference Include="lazyzu.Jira.Database.FieldOption.CodeGen" Version="0.0.1" /> <!--For field selection generate (include type, status, priority... & custom fields)-->
+    <AdditionalFiles Include="SourceGeneration.json" /> <!--Connection & Output config define for field selection generate-->
+  </ItemGroup>
+
+  <!--For source generation output files (source control & review), please not edit generated source code (assembly is reference in memory source code)-->
+  <ItemGroup>
+    <Compile Remove=".\$(GeneratedFolder)\**" />
+    <None Include=".\$(GeneratedFolder)\**" />
+  </ItemGroup>
+
+</Project>

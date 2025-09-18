@@ -1,0 +1,107 @@
+﻿using Generator.Equals;
+using lazyzu.Jira.Database.EntityFrameworkCore;
+using lazyzu.Jira.Database.EntityFrameworkCore.Model;
+using lazyzu.Jira.Database.Querier.Issue.Contract;
+using lazyzu.Jira.Database.Querier.QuerySpecification;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace lazyzu.Jira.Database.Querier.Issue.Fields.Custom
+{
+    [Equatable(Explicit = true)]
+    public partial class DateTimeCustomFieldSchema : IComparable
+    {
+        [DefaultEquality]
+        public DateTime? Value { get; init; }
+
+        public int CompareTo(object obj)
+        {
+            if (obj is DateTimeCustomFieldSchema other) return (Value ?? DateTime.MinValue).CompareTo(other.Value ?? DateTime.MinValue);
+            else if (obj is DateTime otherDateTime) return (Value ?? DateTime.MinValue).CompareTo(otherDateTime);
+            else throw new NotSupportedException($"Not able to compare between {nameof(DateTimeCustomFieldSchema)} & {obj.GetType().Name}");
+        }
+
+        public override string ToString()
+        {
+            return Value?.ToString();
+        }
+    }
+
+    public class DateTimeCustomFieldProjection : IIssueCustomFieldProjectionSpecification
+    {
+        protected readonly JiraContext jiraContext;
+        protected readonly ILogger logger;
+
+        public DateTimeCustomFieldProjection(JiraContext jiraContext, ILogger logger)
+        {
+            this.jiraContext = jiraContext;
+            this.logger = logger;
+        }
+
+        public virtual bool IsSupported(ICustomFieldKey customFieldKey)
+        {
+            var projectionType = customFieldKey.ProjectionType;
+            return projectionType == typeof(DateTimeCustomFieldSchema);
+        }
+
+        public virtual async Task Projection(ICustomFieldKey customFieldKey, IEnumerable<JiraIssue> issues, CancellationToken cancellationToken = default)
+        {
+            var _issues = issues?.ToArray() ?? new JiraIssue[0];
+
+            if (_issues.Any())
+            {
+                var issueIds = _issues.Select<JiraIssue, decimal?>(issue => issue.Id).ToArray();
+
+                var issueValueMap = await LoadIssueValueMap(issueIds, customFieldKey.Id, cancellationToken).ConfigureAwait(false);
+
+                if (issueValueMap.Any())
+                {
+                    foreach (var issue in _issues)
+                    {
+                        if (issueValueMap.TryGetValue(issue.Id, out var value))
+                        {
+                            issue.CustomFields.TryAdd(customFieldKey, new DateTimeCustomFieldSchema
+                            {
+                                Value = value
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        protected virtual async Task<Dictionary<decimal?, DateTime?>> LoadIssueValueMap(decimal?[] issueIds, decimal fieldTypeId, CancellationToken cancellationToken)
+        {
+            var query = jiraContext.customfieldvalue.AsNoTracking()
+                .Where(customfieldvalue => issueIds.Contains(customfieldvalue.ISSUE)
+                                        && fieldTypeId == customfieldvalue.CUSTOMFIELD)
+                .Select(customfieldvalue => new
+                {
+                    customfieldvalue.ISSUE,
+                    customfieldvalue.DATEVALUE
+                });
+
+            var queryResult = await query.ToArrayAsync(cancellationToken).ConfigureAwait(false);
+
+            return queryResult.ToDictionary(dbModel => dbModel.ISSUE
+                                          , dbModel => dbModel.DATEVALUE);
+        }
+    }
+
+    public class DateTimeCustomFieldSpecification : QuerySpecification<customfieldvalue>
+    {
+        public DateTimeCustomFieldSpecification(ICustomFieldKey customFieldKey, Expression<Func<DateTime?, bool>> predicate)
+        {
+            var criteria = QuerySpecificationExtension.Predict((customfieldvalue customfieldvalue) => customfieldvalue.DATEVALUE, predicate
+                                                             , (customfieldvalue customfieldvalue) => customfieldvalue.CUSTOMFIELD == customFieldKey.Id);
+
+            CriteriaGetter = () => Task.FromResult(criteria);
+        }
+    }
+}

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.1</TargetFrameworks>
+    <RootNamespace>lazyzu.Jira.Database.Querier.Fake</RootNamespace>
+    <PackageId>lazyzu.Jira.Database.Querier.Fake</PackageId>
+    <IsPackable>false</IsPackable>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Jira.Database.Querier\Jira.Database.Querier.csproj" />
+    <PackageReference Include="Bogus" Version="35.6.3" />
+  </ItemGroup>
+
+</Project>

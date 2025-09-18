@@ -1,0 +1,9 @@
+{
+  "Database": {
+    "Type": "MySQL",
+    "ConnectionString": ""
+  },
+  "NativeFieldSelection": {
+    "IssueFieldSelectionOutputNamespace": "lazyzu.Jira.Database.OOO.Issue"
+  }
+}

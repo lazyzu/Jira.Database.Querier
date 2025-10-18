@@ -8,7 +8,7 @@ namespace lazyzu.Jira.Database.OOO.Issue
         // Please refer to ../docs/how-to-define-custom-field.md
 
         // com.atlassian.jira.plugin.system.customfieldtypes:float, value field in Jira DB: customfieldvalue.NUMBERVALUE
-        // public static readonly CustomFieldKey<NumberCustomFieldSchema> SameAsJiraFieldName = new CustomFieldKey<NumberCustomFieldSchema>("Jira Field Name", JiraFieldId);
+        public static readonly CustomFieldKey<NumberCustomFieldSchema> SameAsJiraFieldName = new CustomFieldKey<NumberCustomFieldSchema>("Jira Field Name", 123);
 
         // com.atlassian.jira.plugin.system.customfieldtypes:datetime, value field in Jira DB: customfieldvalue.DATEVALUE
         // public static readonly CustomFieldKey<DateTimeCustomFieldSchema> SameAsJiraFieldName = new CustomFieldKey<DateTimeCustomFieldSchema>("Jira Field Name", JiraFieldId);

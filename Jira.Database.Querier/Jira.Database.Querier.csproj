@@ -40,6 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="$(AssemblyName).Fake" />
+    <InternalsVisibleTo Include="$(AssemblyName).Fake;$(AssemblyName).GraphQL" />
   </ItemGroup>
 </Project>

@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Jira.Database.Querier\Jira.Database.Querier.csproj" /> <!--Field define need to reference-->
-    <PackageReference Include="lazyzu.Jira.Database.FieldOption.CodeGen" Version="0.0.1" /> <!--For field selection generate (include type, status, priority... & custom fields)-->
+    <PackageReference Include="lazyzu.Jira.Database.FieldOption.CodeGen" Version="0.0.1" PrivateAssets="All" /> <!--For field selection generate (include type, status, priority... & custom fields)-->
     <AdditionalFiles Include="SourceGeneration.json" /> <!--Connection & Output config define for field selection generate-->
   </ItemGroup>
 

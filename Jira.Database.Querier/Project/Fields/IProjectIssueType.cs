@@ -142,7 +142,7 @@ namespace lazyzu.Jira.Database.Querier.Project.Fields
             {
                 foreach (var issueTypeId in issueTypeIds)
                 {
-                    if (dict.TryGetValue(issueTypeId, out var issueType)) yield return issueType;
+                    if (issueTypeId != null && dict.TryGetValue(issueTypeId, out var issueType)) yield return issueType;
                 }
             }
         }

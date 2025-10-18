@@ -17,8 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Jira.Database.EntityFrameworkCore.MySQL\Jira.Database.EntityFrameworkCore.MySQL.csproj" />
 	<ProjectReference Include="..\Jira.Database.Querier\Jira.Database.Querier.csproj" />
-    <!---->
-	  <ProjectReference Include="..\Jira.Database.OOO\Jira.Database.OOO.csproj" />
+	<ProjectReference Include="..\Jira.Database.OOO\Jira.Database.OOO.csproj" />
   </ItemGroup>
 
 </Project>

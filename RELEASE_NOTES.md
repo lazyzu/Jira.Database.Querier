@@ -1,0 +1,2 @@
+This is the first release. This release includes Jira database query functions for User, Project, Issue, and a GraphQL API Endpoint example.
+For usage instructions, please refer to the [Readme](readme.md)

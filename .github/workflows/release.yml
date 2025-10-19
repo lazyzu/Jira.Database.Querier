@@ -29,28 +29,28 @@ jobs:
       run: dotnet pack --output nupkgs --no-build --configuration Release
      
     - name: Get NuGet Package Name
-        id: nuget_info
-        run: |
-          EFCORE_PACKAGE_PATH=$(find ./nupkgs -iregex "\.\/nupkgs\/Jira\.Database\.EntityFrameworkCore[0-9\.]*nupkg" | head -n 1)
-          EFCORE_PACKAGE_FILENAME=$(basename "$EFCORE_PACKAGE_PATH")
-          echo "efcore_package_path=$EFCORE_PACKAGE_PATH" >> $GITHUB_OUTPUT
-          echo "efcore_package_filename=$EFCORE_PACKAGE_FILENAME" >> $GITHUB_OUTPUT
-          EFCORE_MYSQL_PACKAGE_PATH=$(find ./nupkgs -iregex "\.\/nupkgs\/Jira\.Database\.EntityFrameworkCore\.MySQL[0-9\.]*nupkg" | head -n 1)
-          EFCORE_MYSQL_PACKAGE_FILENAME=$(basename "$EFCORE_MYSQL_PACKAGE_PATH")
-          echo "efcore_mysql_package_path=$EFCORE_MYSQL_PACKAGE_PATH" >> $GITHUB_OUTPUT
-          echo "efcore_mysql_package_filename=$EFCORE_MYSQL_PACKAGE_FILENAME" >> $GITHUB_OUTPUT
-          QUERIER_PACKAGE_PATH=$(find ./nupkgs -iregex "\.\/nupkgs\/Jira\.Database\.Querier[0-9\.]*nupkg" | head -n 1)
-          QUERIER_PACKAGE_FILENAME=$(basename "$QUERIER_PACKAGE_PATH")
-          echo "querier_package_path=$QUERIER_PACKAGE_PATH" >> $GITHUB_OUTPUT
-          echo "querier_package_filename=$QUERIER_PACKAGE_FILENAME" >> $GITHUB_OUTPUT
-          QUERIER_RESTAPI_PACKAGE_PATH=$(find ./nupkgs -iregex "\.\/nupkgs\/Jira\.Database\.Querier\.RestApi[0-9\.]*nupkg" | head -n 1)
-          QUERIER_RESTAPI_PACKAGE_FILENAME=$(basename "$QUERIER_RESTAPI_PACKAGE_PATH")
-          echo "querier_restapi_package_path=$QUERIER_RESTAPI_PACKAGE_PATH" >> $GITHUB_OUTPUT
-          echo "querier_restapi_package_filename=$QUERIER_RESTAPI_PACKAGE_FILENAME" >> $GITHUB_OUTPUT
-          CODEGEN_PACKAGE_PATH=$(find ./nupkgs -iregex "\.\/nupkgs\/Jira\.Database\.FieldOption\.CodeGen[0-9\.]*nupkg" | head -n 1)
-          CODEGEN_PACKAGE_FILENAME=$(basename "$CODEGEN_PACKAGE_PATH")
-          echo "codegen_package_path=$CODEGEN_PACKAGE_PATH" >> $GITHUB_OUTPUT
-          echo "codegen_package_filename=$CODEGEN_PACKAGE_FILENAME" >> $GITHUB_OUTPUT
+      id: nuget_info
+      run: |
+        EFCORE_PACKAGE_PATH=$(find ./nupkgs -iregex "\.\/nupkgs\/Jira\.Database\.EntityFrameworkCore[0-9\.]*nupkg" | head -n 1)
+        EFCORE_PACKAGE_FILENAME=$(basename "$EFCORE_PACKAGE_PATH")
+        echo "efcore_package_path=$EFCORE_PACKAGE_PATH" >> $GITHUB_OUTPUT
+        echo "efcore_package_filename=$EFCORE_PACKAGE_FILENAME" >> $GITHUB_OUTPUT
+        EFCORE_MYSQL_PACKAGE_PATH=$(find ./nupkgs -iregex "\.\/nupkgs\/Jira\.Database\.EntityFrameworkCore\.MySQL[0-9\.]*nupkg" | head -n 1)
+        EFCORE_MYSQL_PACKAGE_FILENAME=$(basename "$EFCORE_MYSQL_PACKAGE_PATH")
+        echo "efcore_mysql_package_path=$EFCORE_MYSQL_PACKAGE_PATH" >> $GITHUB_OUTPUT
+        echo "efcore_mysql_package_filename=$EFCORE_MYSQL_PACKAGE_FILENAME" >> $GITHUB_OUTPUT
+        QUERIER_PACKAGE_PATH=$(find ./nupkgs -iregex "\.\/nupkgs\/Jira\.Database\.Querier[0-9\.]*nupkg" | head -n 1)
+        QUERIER_PACKAGE_FILENAME=$(basename "$QUERIER_PACKAGE_PATH")
+        echo "querier_package_path=$QUERIER_PACKAGE_PATH" >> $GITHUB_OUTPUT
+        echo "querier_package_filename=$QUERIER_PACKAGE_FILENAME" >> $GITHUB_OUTPUT
+        QUERIER_RESTAPI_PACKAGE_PATH=$(find ./nupkgs -iregex "\.\/nupkgs\/Jira\.Database\.Querier\.RestApi[0-9\.]*nupkg" | head -n 1)
+        QUERIER_RESTAPI_PACKAGE_FILENAME=$(basename "$QUERIER_RESTAPI_PACKAGE_PATH")
+        echo "querier_restapi_package_path=$QUERIER_RESTAPI_PACKAGE_PATH" >> $GITHUB_OUTPUT
+        echo "querier_restapi_package_filename=$QUERIER_RESTAPI_PACKAGE_FILENAME" >> $GITHUB_OUTPUT
+        CODEGEN_PACKAGE_PATH=$(find ./nupkgs -iregex "\.\/nupkgs\/Jira\.Database\.FieldOption\.CodeGen[0-9\.]*nupkg" | head -n 1)
+        CODEGEN_PACKAGE_FILENAME=$(basename "$CODEGEN_PACKAGE_PATH")
+        echo "codegen_package_path=$CODEGEN_PACKAGE_PATH" >> $GITHUB_OUTPUT
+        echo "codegen_package_filename=$CODEGEN_PACKAGE_FILENAME" >> $GITHUB_OUTPUT
 
     - name: Release
       uses: softprops/action-gh-release@v2

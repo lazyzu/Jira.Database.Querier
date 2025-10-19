@@ -48,6 +48,7 @@ public class OOOCustomFieldSource : ICustomFieldSource
 {
     public IEnumerable<CustomFieldDefine> GetEnumerable()
     {
-        yield return new CustomFieldDefine(nameof(lazyzu.Jira.Database.OOO.Issue.CustomField.SameAsJiraFieldName), lazyzu.Jira.Database.OOO.Issue.CustomField.SameAsJiraFieldName);
+        yield break;
+        // yield return new CustomFieldDefine(nameof(lazyzu.Jira.Database.OOO.Issue.CustomField.SameAsJiraFieldName), lazyzu.Jira.Database.OOO.Issue.CustomField.SameAsJiraFieldName);
     }
 }

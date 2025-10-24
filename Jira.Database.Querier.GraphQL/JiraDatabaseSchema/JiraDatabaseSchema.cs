@@ -1,7 +1,8 @@
-﻿using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.FieldKeyResolver;
+﻿using GraphQL.Types;
+using lazyzu.Jira.Database.Querier.GraphQL.InMemoryFake;
+using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.FieldKeyResolver;
 using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.GraphType.Issue;
 using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.Query;
-using GraphQL.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -65,6 +66,25 @@ namespace lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema
                 return () =>
                 {
                     return new Jira.Database.EntityFrameworkCore.MySQL.JiraContext(jiraConnectionString);
+                };
+            });
+            services.TryAddSingleton<JiraDatabaseQuery>();
+            services.TryAddSingleton<JiraDatabaseSchema>();
+        }
+
+        public static void AddJiraDatabaseSchemaByInMemoryFake(this WebApplicationBuilder applicationBuilder, InMemoryFakeContext inMemoryFakeContext)
+        {
+            var services = applicationBuilder.Services;
+
+            services.TryAddSingleton<JiraDatabaseQuerierBuilder>(serviceProvider =>
+            {
+                return inMemoryFakeContext.ConstructQuerierBuilder();
+            });
+            services.TryAddSingleton<JiraDatabaseQuerierBuilder.JiraContextGetterDelegate>(serviceProvider =>
+            {
+                return () =>
+                {
+                    return inMemoryFakeContext.JiraContext;
                 };
             });
             services.TryAddSingleton<JiraDatabaseQuery>();

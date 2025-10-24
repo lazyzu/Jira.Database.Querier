@@ -1,20 +1,19 @@
-using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema;
-using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.GraphType.Issue;
 using GraphQL;
+using lazyzu.Jira.Database.Querier.GraphQL;
+using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors();
 
-builder.AddJiraDatabaseSchema(jiraConnectionString: "...", jiraWebUri: new Uri("https://jira.ooo.com/"));
-builder.AddDefaultJiraUserQuery();
-builder.AddDefaultJiraProjectQuery();
-builder.AddDefaultJiraIssueQuery(new ICustomFieldSource[]
-{
-    new OOOCustomFieldSource()
-});
+#if InMemorySIM
+using var inMemoryFakeContext = await JiraDatabaseQueryConfigureUtil.Configure_InMemorySim(builder);
+#else
+JiraDatabaseQueryConfigureUtil.ConfigureJiraDatabaseQuery();
+#endif
+
 builder.Services.AddGraphQL(gqlBuilder =>
 {
     if (builder.Environment.IsProduction() == false)
@@ -35,7 +34,8 @@ builder.Services.AddGraphQL(gqlBuilder =>
 
 var app = builder.Build();
 
-app.UseCors(builder => builder.AllowAnyOrigin()
+app.UseCors(builder => builder
+  .AllowAnyOrigin()
   .AllowAnyHeader()
   .AllowAnyMethod());
 
@@ -43,12 +43,3 @@ app.UseGraphQL(path: "/graphql");
 app.UseGraphQLAltair(path: "/ui/altair");
 
 app.Run();
-
-public class OOOCustomFieldSource : ICustomFieldSource
-{
-    public IEnumerable<CustomFieldDefine> GetEnumerable()
-    {
-        yield break;
-        // yield return new CustomFieldDefine(nameof(lazyzu.Jira.Database.OOO.Issue.CustomField.SameAsJiraFieldName), lazyzu.Jira.Database.OOO.Issue.CustomField.SameAsJiraFieldName);
-    }
-}

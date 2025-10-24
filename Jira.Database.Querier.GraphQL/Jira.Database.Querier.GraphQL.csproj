@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>lazyzu.Jira.Database.Querier.GraphQL</RootNamespace>
+    <DefineConstants>InMemorySIM</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,12 +13,14 @@
 
     <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="8.3.0" />
     <PackageReference Include="GraphQL.Server.Ui.Altair" Version="8.3.0" />
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.20" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Jira.Database.EntityFrameworkCore.MySQL\Jira.Database.EntityFrameworkCore.MySQL.csproj" />
-	<ProjectReference Include="..\Jira.Database.Querier\Jira.Database.Querier.csproj" />
-	<!--<ProjectReference Include="..\Jira.Database.OOO\Jira.Database.OOO.csproj" />-->
+    <ProjectReference Include="..\Jira.Database.Querier.Fake\Jira.Database.Querier.Fake.csproj" />
+    <ProjectReference Include="..\Jira.Database.Querier\Jira.Database.Querier.csproj" />
   </ItemGroup>
 
 </Project>

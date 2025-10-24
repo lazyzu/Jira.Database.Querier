@@ -1,8 +1,8 @@
 <Project>
    <PropertyGroup>
-      <EFCoreVersion>0.0.1</EFCoreVersion>
-      <QuerierVersion>0.0.1</QuerierVersion>
-      <CodeGenVersion>0.0.1</CodeGenVersion>
-      <QuerierRestApiVersion>0.0.1</QuerierRestApiVersion>
+      <EFCoreVersion>0.0.2</EFCoreVersion>
+      <QuerierVersion>0.0.2</QuerierVersion>
+      <CodeGenVersion>0.0.2</CodeGenVersion>
+      <QuerierRestApiVersion>0.0.2</QuerierRestApiVersion>
    </PropertyGroup>
 </Project>

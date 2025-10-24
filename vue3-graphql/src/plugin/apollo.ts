@@ -7,7 +7,7 @@ import {
 } from "@apollo/client/core"
 
 const httpLink = createHttpLink({
-    uri: "http://pc-tu_tu.phison.com:8989/graphql"
+    uri: "http://.../graphql"
 });
 
 const cache = new InMemoryCache();

@@ -1,8 +1,8 @@
-﻿using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.GraphType.Issue;
-using lazyzu.Jira.Database.Querier.Issue.Contract;
-using GraphQL;
+﻿using GraphQL;
 using GraphQL.Types;
 using GraphQLParser.AST;
+using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.GraphType.Issue;
+using lazyzu.Jira.Database.Querier.Issue.Contract;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +10,8 @@ namespace lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.FieldKeyResolv
 {
     public interface IIssueFieldKeyResolver
     {
-        IEnumerable<Issue.Contract.FieldKey> Resolve(Dictionary<string, (GraphQLField Field, FieldType FieldType)> subFields);
+        IEnumerable<Issue.Contract.FieldKey> Resolve(Dictionary<string, (GraphQLField Field, FieldType FieldType)> subFields
+            , GraphQLParser.AST.GraphQLFragmentDefinition[] fragmentDefines);
     }
 
     public class IssueFieldKeyResolver : IIssueFieldKeyResolver
@@ -28,23 +29,24 @@ namespace lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.FieldKeyResolv
             this.customFieldKeyMap = LoadCustomFieldKeyMap(IssueGraphType.CustomFieldSources);
         }
 
-        public IEnumerable<FieldKey> Resolve(Dictionary<string, (GraphQLField Field, FieldType FieldType)> subFields)
+        public IEnumerable<FieldKey> Resolve(Dictionary<string, (GraphQLField Field, FieldType FieldType)> subFields
+            , GraphQLParser.AST.GraphQLFragmentDefinition[] fragmentDefines)
         {
             foreach (var subField in subFields)
             {
                 if (nameof(Issue.IJiraIssue.Project).ToCamelCase().Equals(subField.Key))
                 {
-                    var subFieldKeyOfProject = projectFieldKeyResolver.Resolve(subField.Value.Field).ToArray();
+                    var subFieldKeyOfProject = projectFieldKeyResolver.Resolve(subField.Value.Field, fragmentDefines).ToArray();
                     yield return IssueFieldSelection.ProjectWithField(subFieldKeyOfProject);
                 }
                 else if (nameof(Issue.IJiraIssue.Assignee).ToCamelCase().Equals(subField.Key))
                 {
-                    var subFiledKeyOfAssignee = userFieldKeyResolver.Resolve(subField.Value.Field).ToArray();
+                    var subFiledKeyOfAssignee = userFieldKeyResolver.Resolve(subField.Value.Field, fragmentDefines).ToArray();
                     yield return IssueFieldSelection.AssigneeWithField(subFiledKeyOfAssignee);
                 }
                 else if (nameof(Issue.IJiraIssue.Reporter).ToCamelCase().Equals(subField.Key))
                 {
-                    var subFiledKeyOfReporter = userFieldKeyResolver.Resolve(subField.Value.Field).ToArray();
+                    var subFiledKeyOfReporter = userFieldKeyResolver.Resolve(subField.Value.Field, fragmentDefines).ToArray();
                     yield return IssueFieldSelection.ReporterWithField(subFiledKeyOfReporter);
                 }
                 else if (FieldKeyMap.TryGetValue(subField.Key, out var fieldKey)) yield return fieldKey;

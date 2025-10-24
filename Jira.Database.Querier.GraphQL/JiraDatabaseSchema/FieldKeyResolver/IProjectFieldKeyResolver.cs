@@ -1,7 +1,8 @@
-﻿using lazyzu.Jira.Database.Querier.Project.Contract;
 using GraphQL;
 using GraphQL.Types;
 using GraphQLParser.AST;
+using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.GraphType.Project;
+using lazyzu.Jira.Database.Querier.Project.Contract;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,9 +10,11 @@ namespace lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.FieldKeyResolv
 {
     public interface IProjectFieldKeyResolver
     {
-        IEnumerable<Project.Contract.FieldKey> Resolve(Dictionary<string, (GraphQLField Field, FieldType FieldType)> subFields);
+        IEnumerable<Project.Contract.FieldKey> Resolve(Dictionary<string, (GraphQLField Field, FieldType FieldType)> subFields
+            , GraphQLParser.AST.GraphQLFragmentDefinition[] fragmentDefines);
 
-        IEnumerable<FieldKey> Resolve(GraphQLField field);
+        IEnumerable<FieldKey> Resolve(GraphQLField field
+            , GraphQLParser.AST.GraphQLFragmentDefinition[] fragmentDefines);
     }
 
     public class ProjectFieldKeyResolver : IProjectFieldKeyResolver
@@ -23,36 +26,53 @@ namespace lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.FieldKeyResolv
             this.userFieldKeyResolver = userFieldKeyResolver;
         }
 
-        public IEnumerable<FieldKey> Resolve(Dictionary<string, (GraphQLField Field, FieldType FieldType)> subFields)
+        public IEnumerable<FieldKey> Resolve(Dictionary<string, (GraphQLField Field, FieldType FieldType)> subFields
+            , GraphQLParser.AST.GraphQLFragmentDefinition[] fragmentDefines)
         {
             foreach (var subField in subFields)
             {
                 if (nameof(Project.IJiraProject.Lead).ToCamelCase().Equals(subField.Key))
                 {
-                    var subFiledKeyOfLead = userFieldKeyResolver.Resolve(subField.Value.Field).ToArray();
+                    var subFiledKeyOfLead = userFieldKeyResolver.Resolve(subField.Value.Field, fragmentDefines).ToArray();
                     yield return ProjectFieldSelection.ProjectLeadWithField(subFiledKeyOfLead);
                 }
                 else if (FieldKeyMap.TryGetValue(subField.Key, out var fieldKey)) yield return fieldKey;
             }
         }
 
-        public IEnumerable<FieldKey> Resolve(GraphQLField field)
+        public IEnumerable<FieldKey> Resolve(GraphQLField field
+            , GraphQLParser.AST.GraphQLFragmentDefinition[] fragmentDefines)
         {
             var fieldSelections = field?.SelectionSet?.Selections;
+            return Resolve(fieldSelections, fragmentDefines);
+        }
 
-            if (fieldSelections?.Any() ?? false)
+        private IEnumerable<FieldKey> Resolve(IEnumerable<ASTNode> selections
+            , GraphQLParser.AST.GraphQLFragmentDefinition[] fragmentDefines)
+        {
+            if (selections?.Any() ?? false)
             {
-                foreach (var fieldSelection in fieldSelections)
+                foreach (var selection in selections)
                 {
-                    if (fieldSelection is GraphQLParser.AST.GraphQLField _fieldSelection)
+                    if (selection is GraphQLParser.AST.GraphQLField fieldSelection)
                     {
-                        var fieldName = _fieldSelection.Name.StringValue;
+                        var fieldName = fieldSelection.Name.StringValue;
                         if (nameof(Project.IJiraProject.Lead).ToCamelCase().Equals(fieldName))
                         {
-                            var subFiledKeyOfLead = userFieldKeyResolver.Resolve(_fieldSelection).ToArray();
+                            var subFiledKeyOfLead = userFieldKeyResolver.Resolve(fieldSelection, fragmentDefines).ToArray();
                             yield return ProjectFieldSelection.ProjectLeadWithField(subFiledKeyOfLead);
                         }
                         else if (FieldKeyMap.TryGetValue(fieldName, out var fieldKey)) yield return fieldKey;
+                    }
+                    else if (selection is GraphQLParser.AST.GraphQLFragmentSpread fragmentSelection)
+                    {
+                        var selectedDefine = fragmentDefines?.FirstOrDefault(fragment => fragment.FragmentName.Name.StringValue.Equals(fragmentSelection.FragmentName.Name.StringValue));
+
+                        if (selectedDefine != null && ProjectGraphType.TypeName.Equals(selectedDefine.TypeCondition.Type.Name.StringValue))
+                        {
+                            var fragmentFieldSelections = selectedDefine?.SelectionSet?.Selections;
+                            foreach (var fieldKey in Resolve(fragmentFieldSelections, fragmentDefines)) yield return fieldKey;
+                        }
                     }
                 }
             }

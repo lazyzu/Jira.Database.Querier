@@ -6,9 +6,11 @@ namespace lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.GraphType.Proj
 {
     public class ProjectGraphType : ObjectGraphType<Querier.Project.IJiraProject>
     {
+        public const string TypeName = "Project";
+
         public ProjectGraphType()
         {
-            Name = "Project";
+            Name = TypeName;
 
             Field(p => p.Id).Description("Project Id");
             Field(p => p.Name).Description("Project Name");

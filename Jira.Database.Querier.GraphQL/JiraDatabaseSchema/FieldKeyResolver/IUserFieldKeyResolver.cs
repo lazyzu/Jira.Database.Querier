@@ -1,7 +1,8 @@
-﻿using lazyzu.Jira.Database.Querier.User.Contract;
 using GraphQL;
 using GraphQL.Types;
 using GraphQLParser.AST;
+using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.GraphType.User;
+using lazyzu.Jira.Database.Querier.User.Contract;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,14 +10,17 @@ namespace lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.FieldKeyResolv
 {
     public interface IUserFieldKeyResolver
     {
-        IEnumerable<User.Contract.FieldKey> Resolve(Dictionary<string, (GraphQLField Field, FieldType FieldType)> subFields);
+        IEnumerable<User.Contract.FieldKey> Resolve(Dictionary<string, (GraphQLField Field, FieldType FieldType)> subFields
+            , GraphQLParser.AST.GraphQLFragmentDefinition[] fragmentDefines);
 
-        IEnumerable<FieldKey> Resolve(GraphQLField field);
+        IEnumerable<FieldKey> Resolve(GraphQLField field
+            , GraphQLParser.AST.GraphQLFragmentDefinition[] fragmentDefines);
     }
 
     public class UserFieldKeyResolvee : IUserFieldKeyResolver
     {
-        public IEnumerable<FieldKey> Resolve(Dictionary<string, (GraphQLField Field, FieldType FieldType)> subFields)
+        public IEnumerable<FieldKey> Resolve(Dictionary<string, (GraphQLField Field, FieldType FieldType)> subFields
+            , GraphQLParser.AST.GraphQLFragmentDefinition[] fragmentDefines)
         {
             foreach (var subField in subFields)
             {
@@ -24,18 +28,34 @@ namespace lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.FieldKeyResolv
             }
         }
 
-        public IEnumerable<FieldKey> Resolve(GraphQLField field)
+        public IEnumerable<FieldKey> Resolve(GraphQLField field
+            , GraphQLParser.AST.GraphQLFragmentDefinition[] fragmentDefines)
         {
             var fieldSelections = field?.SelectionSet?.Selections;
+            return Resolve(field?.SelectionSet?.Selections, fragmentDefines);
+        }
 
-            if (fieldSelections?.Any() ?? false)
+        private IEnumerable<FieldKey> Resolve(IEnumerable<ASTNode> selections
+            , GraphQLParser.AST.GraphQLFragmentDefinition[] fragmentDefines)
+        {
+            if (selections?.Any() ?? false)
             {
-                foreach (var fieldSelection in fieldSelections)
+                foreach (var selection in selections)
                 {
-                    if (fieldSelection is GraphQLParser.AST.GraphQLField _fieldSelection)
+                    if (selection is GraphQLParser.AST.GraphQLField fieldSelection)
                     {
-                        var fieldName = _fieldSelection.Name.StringValue;
+                        var fieldName = fieldSelection.Name.StringValue;
                         if (FieldKeyMap.TryGetValue(fieldName, out var fieldKey)) yield return fieldKey;
+                    }
+                    else if (selection is GraphQLParser.AST.GraphQLFragmentSpread fragmentSelection)
+                    {
+                        var selectedDefine = fragmentDefines?.FirstOrDefault(fragment => fragment.FragmentName.Name.StringValue.Equals(fragmentSelection.FragmentName.Name.StringValue));
+
+                        if (selectedDefine != null && UserGraphType.TypeName.Equals(selectedDefine.TypeCondition.Type.Name.StringValue))
+                        {
+                            var fragmentFieldSelections = selectedDefine?.SelectionSet?.Selections;
+                            foreach (var fieldKey in Resolve(fragmentFieldSelections, fragmentDefines)) yield return fieldKey;
+                        }
                     }
                 }
             }

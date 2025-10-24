@@ -1,10 +1,10 @@
-﻿using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.GraphType.Issue.CustomField;
+﻿using GraphQL;
+using GraphQL.Types;
+using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.GraphType.Issue.CustomField;
 using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.Query;
 using lazyzu.Jira.Database.Querier.Issue;
 using lazyzu.Jira.Database.Querier.Issue.Contract;
 using lazyzu.Jira.Database.Querier.Issue.Fields.Custom;
-using GraphQL;
-using GraphQL.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +13,11 @@ namespace lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.GraphType.Issu
 {
     public class IssueGraphType : ObjectGraphType<Querier.Issue.IJiraIssue>
     {
+        public const string TypeName = "Issue";
+
         public IssueGraphType()
         {
-            Name = "Issue";
+            Name = TypeName;
 
             Field(i => i.Id).Description("");
             Field(i => i.IssueNum).Description("");

@@ -1,8 +1,8 @@
-﻿using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.FieldKeyResolver;
+﻿using GraphQL;
+using GraphQL.Types;
+using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.FieldKeyResolver;
 using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.GraphType.Shared;
 using lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.GraphType.User;
-using GraphQL;
-using GraphQL.Types;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 
@@ -31,7 +31,8 @@ namespace lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.Query
                 .Argument<string>(userKeyArgument, nullable: true)
                 .ResolveAsync(async context =>
                 {
-                    var fieldKeySelections = userFieldKeyResolve.Resolve(context.SubFields).ToArray();
+                    var fragmentDefines = context.LoadFragmentDefines().ToArray();
+                    var fieldKeySelections = userFieldKeyResolve.Resolve(context.SubFields, fragmentDefines).ToArray();
 
                     if (fieldKeySelections.Any())
                     {
@@ -67,7 +68,8 @@ namespace lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.Query
                 .Argument<string[]>(usersKeyArgument, nullable: true)
                 .ResolveAsync(async context =>
                 {
-                    var fieldKeySelections = userFieldKeyResolve.Resolve(context.SubFields).ToArray();
+                    var fragmentDefines = context.LoadFragmentDefines().ToArray();
+                    var fieldKeySelections = userFieldKeyResolve.Resolve(context.SubFields, fragmentDefines).ToArray();
 
                     if (fieldKeySelections.Any())
                     {

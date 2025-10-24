@@ -4,9 +4,11 @@ namespace lazyzu.Jira.Database.Querier.GraphQL.JiraDatabaseSchema.GraphType.User
 {
     public class UserGraphType : ObjectGraphType<Querier.User.IJiraUser>
     {
+        public const string TypeName = "User";
+
         public UserGraphType()
         {
-            Name = "User";
+            Name = TypeName;
 
             Field(u => u.AppId).Description("Id in AppUser Table");
             Field(u => u.CwdId).Description("Id in CwdUser Table");

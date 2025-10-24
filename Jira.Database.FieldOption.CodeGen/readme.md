@@ -6,11 +6,11 @@ This allows you to easily package Jira variable options within your organization
 Subsequently, whether you need to compare field values or have a basis for searching through field values.
 (it’s possible to directly compare by id or name, but having a list of options should make development smoother and maintenance easier)
 
-About `Jira.Database.FieldOption.CodeGen`, you can refer to the [source code](https://github.com/lazyzu/Jira.Database.Querier/blob/v0.0.1/Jira.Database.FieldOption.CodeGen).
+About `Jira.Database.FieldOption.CodeGen`, you can refer to the [source code](https://github.com/lazyzu/Jira.Database.Querier/blob/v0.0.2/Jira.Database.FieldOption.CodeGen).
 Or use [NuGet](https://www.nuget.org/packages/lazyzu.Jira.Database.FieldOption.CodeGen) for referencing.
 
 Note that `Jira.Database.FieldOption.CodeGen` currently only supports MySQL databases for Jira.
-Detailed examples can be found in the [Jira.Database.OOO](https://github.com/lazyzu/Jira.Database.Querier/blob/v0.0.1/Jira.Database.OOO) project.
+Detailed examples can be found in the [Jira.Database.OOO](https://github.com/lazyzu/Jira.Database.Querier/blob/v0.0.2/Jira.Database.OOO) project.
 
 ## Generated Items
 
@@ -70,7 +70,7 @@ Region | lazyzu.Jira.Database.OOO.Issue.CustomFieldSelection.Region
 
 ### User custom field
 
-Since the return type of User custom fields is User, similar to Native Fields such as `Assignee` and `Reporter`, the default return is `user name` and `user key` ([based on JiraDatabaseQuerierBuilder configuration](https://github.com/lazyzu/Jira.Database.Querier/blob/v0.0.1\docs\querier-builder-configuration.md)).
+Since the return type of User custom fields is User, similar to Native Fields such as `Assignee` and `Reporter`, the default return is `user name` and `user key` ([based on JiraDatabaseQuerierBuilder configuration](https://github.com/lazyzu/Jira.Database.Querier/blob/v0.0.2\docs\querier-builder-configuration.md)).
 
 Each of them can specify the individual required detail fields through`lazyzu.Jira.Database.Querier.IssueFieldSelection.AssigneeWithField` or `lazyzu.Jira.Database.Querier.IssueFieldSelection.ReporterWithField`.
 

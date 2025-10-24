@@ -1,0 +1,29 @@
+{
+  "name": "vue3-graphql",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "codegen": "graphql-codegen --config codegen.ts",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vue/apollo-composable": "^4.2.2",
+    "vue": "^3.5.22",
+    "vue-router": "^4.6.2"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^6.0.0",
+    "@types/node": "^24.6.0",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/tsconfig": "^0.8.1",
+    "typescript": "~5.9.3",
+    "vite": "npm:rolldown-vite@7.1.14",
+    "vue-tsc": "^3.1.0"
+  },
+  "overrides": {
+    "vite": "npm:rolldown-vite@7.1.14"
+  }
+}

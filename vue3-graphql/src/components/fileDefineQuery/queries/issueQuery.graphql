@@ -1,0 +1,24 @@
+query FileDefineQuery_IssueQuery($key: String)
+{
+    issue(key: $key)
+    {
+        id,
+        summary,
+        priority
+        {
+            name
+        },
+        issueStatus
+        {
+            name
+        },
+        assignee
+        {
+            username,
+        },
+        reporter
+        {
+            username,
+        }
+    }
+}

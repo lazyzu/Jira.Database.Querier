@@ -43,7 +43,7 @@ namespace lazyzu.Jira.Database.Querier.Fake
                 .RuleFor(user => user.Key, (faker, user) => $"JIRAUSER{user.AppId}")
                 .RuleFor(user => user.Username, faker => $"{faker.Name.FirstName()}_{faker.Name.LastName()}")
                 .RuleFor(user => user.DisplayName, (faker, user) => user.Username)
-                .RuleFor(user => user.Email, (faker, user) => $"{user.Username}@testlazyzu.Jira.com")
+                .RuleFor(user => user.Email, (faker, user) => $"{user.Username}@test.jira.com")
                 .RuleFor(user => user.IsActive, true)
                 .RuleFor(user => user.Avatar, (faker, user) => new UserAvatar
                 {

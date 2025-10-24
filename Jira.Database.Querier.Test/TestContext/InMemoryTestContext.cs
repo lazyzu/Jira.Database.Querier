@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace lazyzu.Jira.Database.Querier.Test.TestContext
 {
-    public class InMemoryTestContext
+    public class InMemoryTestContext : IDisposable
     {
         protected readonly string jiraServerUrl;
 

@@ -4,10 +4,22 @@
     <TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.1</TargetFrameworks>
     <RootNamespace>lazyzu.Jira.Database.EntityFrameworkCore</RootNamespace>
     <PackageId>lazyzu.Jira.Database.EntityFrameworkCore</PackageId>
+    <PackageDescription>EFCore DB Context for JIRA</PackageDescription>
+    <PackageProjectUrl>https://github.com/lazyzu/Jira.Database.Querier</PackageProjectUrl>
+    <Authors>lazyzu</Authors>
     <Version>$(EFCoreVersion)</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <IsPackable>true</IsPackable>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
     <LangVersion>latest</LangVersion>
     <NoWarn>8981</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <!-- Sourcelink: https://github.com/dotnet/sourcelink/ -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
@@ -24,6 +36,14 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.15" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)'=='Release'">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="readme.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
 </Project>

@@ -4,13 +4,26 @@
     <TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.1</TargetFrameworks>
     <RootNamespace>lazyzu.Jira.Database.Querier</RootNamespace>
     <PackageId>lazyzu.Jira.Database.Querier</PackageId>
+    <PackageDescription>Collection of methods for querying the JIRA database</PackageDescription>
+    <PackageProjectUrl>https://github.com/lazyzu/Jira.Database.Querier</PackageProjectUrl>
+    <Authors>lazyzu</Authors>
     <Version>$(QuerierVersion)</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <IsPackable>true</IsPackable>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <!-- Sourcelink: https://github.com/dotnet/sourcelink/ -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\Jira.Database.EntityFrameworkCore\Jira.Database.EntityFrameworkCore.csproj" />
+    <PackageReference Include="Generator.Equals" Version="3.2.0" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
@@ -29,11 +42,12 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Generator.Equals" Version="3.2.0" />
+  <ItemGroup Condition="'$(Configuration)'=='Release'">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="readme.md" Pack="true" PackagePath="\"/>
     <Compile Update="JiraDatabaseQuerierBuilder.*.cs">
       <DependentUpon>JiraDatabaseQuerierBuilder.cs</DependentUpon>
     </Compile>

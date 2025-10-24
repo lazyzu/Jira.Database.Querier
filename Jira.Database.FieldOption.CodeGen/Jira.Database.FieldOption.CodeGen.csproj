@@ -4,8 +4,13 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>lazyzu.Jira.Database.FieldOption.CodeGen</RootNamespace>
     <PackageId>lazyzu.Jira.Database.FieldOption.CodeGen</PackageId>
+    <PackageDescription>Generates options for built-in fields like IssueType and Status, as well as Select Custom Fields</PackageDescription>
+    <PackageProjectUrl>https://github.com/lazyzu/Jira.Database.Querier</PackageProjectUrl>
+    <Authors>lazyzu</Authors>
     <Version>$(CodeGenVersion)</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <IsPackable>true</IsPackable>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
     <LangVersion>latest</LangVersion>
     <PlatformTarget>AnyCPU</PlatformTarget>
 
@@ -69,5 +74,7 @@
     <None Include="$(PKGMicrosoft_Extensions_DependencyInjection_Abstractions)\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
     <None Include="$(PKGMicrosoft_Extensions_Logging_Abstractions)\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
     <None Include="$(PKGSystem_Diagnostics_DiagnosticSource)\lib\netstandard2.0\System.Diagnostics.DiagnosticSource.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+
+    <None Include="readme.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 </Project>

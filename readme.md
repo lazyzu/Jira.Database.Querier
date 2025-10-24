@@ -18,7 +18,7 @@ Project | Description
 [Jira.Database.Querier.Test](./Jira.Database.Querier.Test) | Creates fake data in-memory and reads it to verify functionality correctness
 
 ## License
-This project is licensed under [MIT](/LICENSE.md).
+This project is licensed under [MIT](./LICENSE).
 
 ## Dependencies & Requirements
 - [Microsoft.EntityFrameworkCore.Relational](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Relational)

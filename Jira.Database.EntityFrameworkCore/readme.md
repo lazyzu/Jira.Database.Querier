@@ -1,0 +1,1 @@
+Based on the [JIRA v8.20 Database Schema](https://developer.atlassian.com/server/jira/platform/database-schema/), the EFCore DB Context for JIRA is a dependency library belonging to [Jira.Database.Querier](https://www.nuget.org/packages/lazyzu.Jira.Database.Querier).
